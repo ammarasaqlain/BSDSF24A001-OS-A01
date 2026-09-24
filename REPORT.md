@@ -19,3 +19,14 @@ The `ar` (archiver) command basically acts like a zip program; it bundles a bunc
 
 **3. When you run nm on your client_static executable, are the symbols for functions like mystrlen present? What does this tell you about how static linking works?**
 Yes, the symbols like `mystrlen` are physically present inside the executable. This proves that static linking literally copy-pastes the raw code directly out of the library and permanently injects it into the final program's binary file, meaning the program doesn't need the external library file anymore to run.
+
+## Feature-4 Report Questions
+
+**1. What happens if you run the dynamic client without setting LD_LIBRARY_PATH? Why?**
+If you try to run it without setting `LD_LIBRARY_PATH`, the program immediately crashes and says it can't find the shared object file. This happens because Linux only checks its default system folders (like `/usr/lib`) for dynamic libraries. It has no idea our custom `lib/` folder even exists, so we have to use the `LD_LIBRARY_PATH` variable to manually point it there.
+
+**2. What does the ldd command do? How does its output confirm that your executable is using the shared library?**
+The `ldd` command basically just lists out all the dynamic libraries that a program needs to run. When we run it on our executable, it physically lists `libmyutils.so` and shows the exact path to our `lib/` folder, which proves our program is successfully linked to our custom shared library.
+
+**3. Compare the nm output for mystrlen in Part 3 and Part 4. What does the difference signify?**
+In Part 3 (static library), the `nm` command showed a `T` (Text) next to `mystrlen`, which meant the code was physically copied directly inside the executable file. But in Part 4 (dynamic library), it shows a `U` (Undefined). This proves the actual code isn't inside the executable anymore, and the program is just borrowing it from the `.so` file on the fly.
