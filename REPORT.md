@@ -8,3 +8,14 @@ A git tag is a permanent, unmoving bookmark placed on a specific commit (save fi
 
 **3. What is the purpose of creating a "Release" on GitHub? What is the significance of attaching binaries (like your client executable) to it?**
 The purpose of a GitHub Release is to provide an official, packaged download page for a specific version of your software. Attaching binaries (like the compiled `client` executable) is absolutely critical because it allows end-users to just download the program and double-click it to run it immediately. If you do not attach the binary, users would be forced to download your raw source code, install a C compiler, and run the Makefile themselves just to use your app.
+
+## Feature-3 Report Questions
+
+**1. Compare the Makefile from Part 2 and Part 3. What are the key differences in the variables and rules that enable the creation of a static library?**
+In Part 2, we just took all the `.o` files and directly linked them to make the executable. In Part 3, we had to add a completely new rule that uses the `ar` command to pack those `.o` files into a single `.a` library file first. Then, we updated the compiler rule to use the `-L` (library directory) and `-l` (library name) flags so it knows to link our new static library instead of raw object files.
+
+**2. What is the purpose of the ar command? Why is ranlib often used immediately after it?**
+The `ar` (archiver) command basically acts like a zip program; it bundles a bunch of loose `.o` object files into one massive static library file. `ranlib` is used right after it to build a searchable index (like a table of contents) for that library file, which helps the compiler find specific functions way faster without having to scan the whole file. 
+
+**3. When you run nm on your client_static executable, are the symbols for functions like mystrlen present? What does this tell you about how static linking works?**
+Yes, the symbols like `mystrlen` are physically present inside the executable. This proves that static linking literally copy-pastes the raw code directly out of the library and permanently injects it into the final program's binary file, meaning the program doesn't need the external library file anymore to run.
